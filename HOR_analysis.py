@@ -27,6 +27,8 @@ with open(sys.argv[1]) as f:
     reads = pickle.load(f)
 unit_size = int(sys.argv[2])
 
+total_HOR_units = {}
+
 for read, seq in reads.iteritems():
     kmers = generate_kmers(seq, unit_size)
 
@@ -48,4 +50,10 @@ for read, seq in reads.iteritems():
             kmers = filter(lambda x: x != kmer, kmers)
 
     for HOR, freq in HOR_unit_freq.iteritems():
-        print HOR, freq
+        if HOR in total_HOR_units:
+            total_HOR_units[HOR] += freq
+        else:
+            total_HOR_units[HOR] = freq
+
+for HOR, freq in total_HOR_units.iteritems():
+    print HOR, freq
