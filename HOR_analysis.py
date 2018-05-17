@@ -55,5 +55,19 @@ for read, seq in reads.iteritems():
         else:
             total_HOR_units[HOR] = freq
 
+HOR_units = total_HOR_units.keys()
+while len(HOR_units) > 0:
+    HOR = HOR_units[0]
+    marked = [HOR]
+
+    for kmer in HOR_units[1:]:
+        if checkRotation(HOR, kmer):
+            total_HOR_units[HOR] += total_HOR_units[kmer]
+            del total_HOR_units[kmer]
+            marked += [kmer]
+
+    for kmer in marked:
+        HOR_units = filter(lambda x: x != kmer, HOR_units)
+
 for HOR, freq in total_HOR_units.iteritems():
-    print HOR, freq
+    print freq, HOR.split('#')
