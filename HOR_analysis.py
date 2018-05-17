@@ -23,6 +23,12 @@ def checkRotation(seqA, seqB):
         return False
     return True
 
+def checkRotationList(seqA, seq_list):
+    for seqB in seq_list:
+        if checkRotation(seqA, seqB):
+            return seqB
+    return False
+
 with open(sys.argv[1]) as f:
     reads = pickle.load(f)
 unit_size = int(sys.argv[2])
@@ -53,21 +59,11 @@ for read, seq in reads.iteritems():
         if HOR in total_HOR_units:
             total_HOR_units[HOR] += freq
         else:
-            total_HOR_units[HOR] = freq
-
-HOR_units = total_HOR_units.keys()
-while len(HOR_units) > 0:
-    HOR = HOR_units[0]
-    marked = [HOR]
-
-    for kmer in HOR_units[1:]:
-        if checkRotation(HOR, kmer):
-            total_HOR_units[HOR] += total_HOR_units[kmer]
-            del total_HOR_units[kmer]
-            marked += [kmer]
-
-    for kmer in marked:
-        HOR_units = filter(lambda x: x != kmer, HOR_units)
+            match_seq = checkRotationList(HOR, total_HOR_units.keys())
+            if match_seq != False:
+                total_HOR_units[match_seq] += freq
+            else:
+                total_HOR_units[HOR] = freq
 
 for HOR, freq in total_HOR_units.iteritems():
     print freq, HOR.split('#')
