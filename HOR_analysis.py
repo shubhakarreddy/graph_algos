@@ -19,7 +19,8 @@ def generate_kmers(seq, unit_size):
     return kmer_list
 
 def checkRotation(seqA, seqB):
-    if '#'.join([seqA, seqA]).find(seqB) == -1:
+    rev_seqB = '#'.join(seqB.split('#')[::-1])
+    if '#'.join([seqA, seqA]).find(seqB) == -1 and '#'.join([seqA, seqA]).find(rev_seqB) == -1:
         return False
     return True
 
