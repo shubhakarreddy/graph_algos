@@ -66,5 +66,8 @@ for read, seq in reads.iteritems():
             else:
                 total_HOR_units[HOR] = freq
 
+with open('total_HOR_units.pickle', 'w') as f:
+    pickle.dump(total_HOR_units, f)
+
 for HOR, freq in total_HOR_units.iteritems():
     print freq, HOR.split('#')
